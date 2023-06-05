@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graqph"
+    app:startDestination="@id/usersFragment">
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.launder.ui.auth.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_shoppingFragment"
+            app:destination="@id/shoppingFragment" />
+    </fragment>
+
+
+
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.launder.ui.auth.EditProfileFragment"
+        android:label="EditProfileFragment" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/shoppingFragment"
+        android:name="com.example.launder.ui.home.customer.ShoppingFragment"
+        android:label="ShoppingFragment" >
+        <action
+            android:id="@+id/action_shoppingFragment_to_ordersFragment"
+            app:destination="@id/ordersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.example.launder.ui.home.customer.UsersFragment"
+        android:label="UsersFragment" >
+        <action
+            android:id="@+id/action_usersFragment_to_customersServiceFragment"
+            app:destination="@id/customersServiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/customersServiceFragment"
+        android:name="com.example.launder.ui.home.customer.CustomersServiceFragment"
+        android:label="CustomersServiceFragment">
+
+    </fragment>
+</navigation>

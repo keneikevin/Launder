@@ -90,11 +90,11 @@ class MainViewModel @Inject constructor(
             _users.postValue((result))
         }
     }
-    fun getService() {
+    fun getService(uid:String) {
         _services.postValue((Resouce.loading(null)))
 
         viewModelScope.launch(dispatcher){
-            val result = repository.getServices()
+            val result = repository.getServices(uid)
             _services.postValue((result))
         }
     }
@@ -181,20 +181,20 @@ class MainViewModel @Inject constructor(
     }
     fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String){
         _bookServiceStatus.postValue(((Resouce.loading(null))))
-        viewModelScope.launch(dispatcher) {
-            val res = repository.getServices()
-            val result = res.data?.let {
-                repository.bookServices(
-                    code,
-                    status,
-                    bookTime,
-                    completeTime,
-                    prise,
-                    services = it
-                )
-            }
-
-            _bookServiceStatus.postValue((result))
-        }
+//        viewModelScope.launch(dispatcher) {
+//            val res = repository.getServices()
+//            val result = res.data?.let {
+//                repository.bookServices(
+//                    code,
+//                    status,
+//                    bookTime,
+//                    completeTime,
+//                    prise,
+//                    services = it
+//                )
+//            }
+//
+//            _bookServiceStatus.postValue((result))
+//        }
     }
 }

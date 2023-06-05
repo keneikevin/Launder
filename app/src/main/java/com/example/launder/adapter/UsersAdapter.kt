@@ -65,9 +65,8 @@ class UsersAdapter @Inject constructor(
             tvPostText.text = post.time
             cad.setOnClickListener {
                 Snackbar.make(this.itemView, "Swipe ..", Snackbar.LENGTH_SHORT).show()
-             //   val directions= CustomersServiceFragmentDirections.actionCustomersServiceFragmentToDetailFragment(post)
-//                val directions= UsersFragmentDirections.actionUsersFragmentToCustomersServiceFragment(post)
-//                it.findNavController().navigate(directions)
+                val directions= UsersFragmentDirections.actionUsersFragmentToCustomersServiceFragment(post)
+                it.findNavController().navigate(directions)
 
             }
 

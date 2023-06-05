@@ -191,12 +191,12 @@ class mainRepositoryImpl @Inject constructor(
             Resource.Error(e.localizedMessage)
         }
     }
-    override suspend fun getServices() = withContext(Dispatchers.IO) {
+    override suspend fun getServices(uiid: String) = withContext(Dispatchers.IO) {
         safeCall {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
 
 
-            val allPosts = cakes.whereEqualTo("authorUid", uid)
+            val allPosts = cakes.whereEqualTo("authorUid", uiid)
                 //  .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .await()

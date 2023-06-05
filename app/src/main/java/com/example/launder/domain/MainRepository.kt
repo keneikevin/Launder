@@ -26,7 +26,7 @@ interface mainRepository {
 
 
 
-    suspend fun getServices(): Resouce<List<Service>>
+    suspend fun getServices(uid:String): Resouce<List<Service>>
     suspend fun getUsers(): Resouce<List<User>>
     suspend fun signup(name: String, email: String, password: String,phone:String): Resource<FirebaseUser>
     fun logout()

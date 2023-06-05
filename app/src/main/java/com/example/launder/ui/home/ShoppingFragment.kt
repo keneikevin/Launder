@@ -53,7 +53,7 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
             //performing positive action
             builder.setPositiveButton("Yes"){dialogInterface, which ->
 
-                findNavController().navigate(R.id.action_shoppingFragment_to_ordersFragment)
+                findNavController().navigate(R.id.action_shoppingFragment_to_ordersFragment2)
             }
             builder.setNeutralButton("Cancel"){dialogInterface , which ->
                 /*NO-Op*/

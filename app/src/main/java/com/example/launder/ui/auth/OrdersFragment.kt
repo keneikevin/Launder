@@ -44,7 +44,7 @@ class OrdersFragment :Fragment(R.layout.fragment_order){
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_cart -> {
-               // findNavController().navigate(R.id.action_ordersFragment_to_shoppingFragment)
+               findNavController().navigate(R.id.action_ordersFragment_to_shoppingFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graqph"
-    app:startDestination="@id/usersFragment">
+    app:startDestination="@id/ordersFragment">
 
     <fragment
         android:id="@+id/profileFragment"
@@ -36,7 +36,7 @@
         android:name="com.example.launder.ui.home.customer.ShoppingFragment"
         android:label="ShoppingFragment" >
         <action
-            android:id="@+id/action_shoppingFragment_to_ordersFragment"
+            android:id="@+id/action_shoppingFragment_to_ordersFragment2"
             app:destination="@id/ordersFragment" />
     </fragment>
     <fragment
@@ -52,5 +52,30 @@
         android:name="com.example.launder.ui.home.customer.CustomersServiceFragment"
         android:label="CustomersServiceFragment">
 
+        <argument
+            android:name="currentUser"
+            app:argType="com.example.launder.data.User" />
+        <action
+            android:id="@+id/action_customersServiceFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_customersServiceFragment_to_shoppingFragment"
+            app:destination="@id/shoppingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ordersFragment"
+        android:name="com.example.launder.ui.auth.OrdersFragment"
+        android:label="OrdersFragment" >
+        <action
+            android:id="@+id/action_ordersFragment_to_shoppingFragment"
+            app:destination="@id/shoppingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.launder.ui.home.customer.DetailFragment"
+        android:label="DetailFragment" >
+        <argument
+            android:name="currentService"
+            app:argType="com.example.launder.data.Service" />
     </fragment>
 </navigation>

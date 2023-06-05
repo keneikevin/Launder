@@ -1,10 +1,14 @@
 package com.example.launder.ui.home.customer
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,14 +34,26 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
     private lateinit var binding: FragmentCustomersServiceBinding
     private lateinit var sss: List<Service>
     private val viewModel: MainViewModel by viewModels()
+    private val args:CustomersServiceFragmentArgs by navArgs()
+
     protected open val uid:String
         get() = FirebaseAuth.getInstance().uid!!
     //private val args:CustomersServiceFragmentArgs by navArgs()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCustomersServiceBinding.bind(view)
+        if (args.currentUser.uid.isNotEmpty()){
+            viewModel.getService(args.currentUser.uid)
+            subscribeToObservers()
+        }
         subscribeToObservers()
         setUpRecylerView()
         viewModel.loadOrder(uid)
@@ -57,7 +73,7 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
     }
 
     private fun setUpRecylerView() = binding.rvCakes.apply{
-        viewModel.getService()
+
         serviveAdapter= ServiceCustomerAdapter(glide)
         binding.rvCakes.adapter = serviveAdapter
         binding.rvCakes.layoutManager = LinearLayoutManager(requireContext())

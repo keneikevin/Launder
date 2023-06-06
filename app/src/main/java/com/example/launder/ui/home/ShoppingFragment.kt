@@ -25,6 +25,7 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
     private lateinit var binding: FragmentCartBinding
     lateinit var viewModel: MainViewModel
     private lateinit var shoppingAdapter: ShoppingAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)

@@ -59,10 +59,10 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
         viewModel.loadOrder(uid)
         setHasOptionsMenu(true)
 
-        requireActivity().title = "${args.currentUser.username} Services"
 
         serviveAdapter.notifyDataSetChanged()
 
+        requireActivity().title = "${args.currentUser.username} Services"
     }
 
     override fun onPause() {

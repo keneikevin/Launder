@@ -33,7 +33,7 @@ class mainRepositoryImpl @Inject constructor(
     private val firestore = FirebaseFirestore.getInstance()
     private val storage = Firebase.storage
     private val cakes = firestore.collection(SERVICE_COLLECTION)
-    private val orders = firestore.collection("oders")
+    private val orders = firestore.collection("orders")
     private val users = firestore.collection("users")
 
     override val currentUser: FirebaseUser?
@@ -48,7 +48,9 @@ class mainRepositoryImpl @Inject constructor(
             Resource.Error(e.localizedMessage)
         }
     }
-    override suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String, services:List<Service>) = withContext(Dispatchers.IO) {
+
+
+    override suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String,services:List<ShoppingItem>) = withContext(Dispatchers.IO) {
         safeCall {
             val uid = firebaseAuth.uid!!
             val oderId = UUID.randomUUID().toString()
@@ -64,25 +66,6 @@ class mainRepositoryImpl @Inject constructor(
                 services = services
             )
             orders.document(oderId).set(post).await()
-            Resouce.success(Any())
-        }
-    }
-
-    override suspend fun createService(imageUri: Uri, name: String, prise:String, per:String) = withContext(Dispatchers.IO) {
-        safeCall {
-            val uid = firebaseAuth.uid!!
-            val postId = UUID.randomUUID().toString()
-            val imageUploadResult = storage.getReference(postId).putFile(imageUri).await()
-            val imageUrl = imageUploadResult?.metadata?.reference?.downloadUrl?.await().toString()
-            val post = Service(
-                mediaId = postId,
-                title = name,
-                img = imageUrl,
-                price = prise,
-                per = per,
-                authorUid = uid
-            )
-            cakes.document(postId).set(post).await()
             Resouce.success(Any())
         }
     }

@@ -30,9 +30,7 @@ interface mainRepository {
     suspend fun getUsers(): Resouce<List<User>>
     suspend fun signup(name: String, email: String, password: String,phone:String): Resource<FirebaseUser>
     fun logout()
-
-    suspend fun createService(imageUri: Uri, name: String, prise:String, per:String): Resouce<Any>
-    suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String, services:List<Service>): Resouce<Any>
+    suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String,services:List<ShoppingItem>):Resouce<Any>
 
     suspend fun getOrder(uid: String): Resouce<Order>
     suspend fun insertShoppingItem(shoppingItem: ShoppingItem)

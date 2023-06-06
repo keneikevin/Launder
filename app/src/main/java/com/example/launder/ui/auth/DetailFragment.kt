@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.launder.R
 import com.example.launder.databinding.FragmentDetailBinding
+import com.example.launder.domain.MainViewModel
 import com.example.launder.other.Status
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,14 +19,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailFragment: Fragment(R.layout.fragment_detail) {
 
     private lateinit var binding: FragmentDetailBinding
-    lateinit var viewModel: ShoppingViewModel
+    lateinit var viewModel: MainViewModel
     private val args:DetailFragmentArgs by navArgs()
 
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         binding = FragmentDetailBinding.bind(view)
         if (args.currentService.mediaId.isNotEmpty()){
             viewModel.getServiceById(args.currentService.mediaId)

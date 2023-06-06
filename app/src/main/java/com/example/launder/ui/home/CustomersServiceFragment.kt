@@ -60,15 +60,7 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
         setHasOptionsMenu(true)
 
         requireActivity().title = "${args.currentUser.username} Services"
-//        binding.fab.setOnClickListener {
-//          viewModel.bookServices(
-//              code = "String",
-//              status = "Pending",
-//              bookTime = "8882",
-//              completeTime ="8882",
-//              prise = binding.total.text.toString()
-//          )
-//        }
+
         serviveAdapter.notifyDataSetChanged()
 
     }
@@ -129,7 +121,7 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
                 }
 
             })
-            viewModel.services.observe(viewLifecycleOwner, Observer { result ->
+            viewModel.service.observe(viewLifecycleOwner, Observer { result ->
                 result?.let {
                     when (result.status) {
                         Status.SUCCESS ->{

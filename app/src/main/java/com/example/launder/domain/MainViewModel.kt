@@ -1,6 +1,7 @@
 package com.example.launder.domain
 
 import android.content.Context
+import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -15,6 +16,7 @@ import com.example.launder.data.User
 import com.example.launder.other.Constants.MIN_USER_NAME
 import com.example.launder.other.Resouce
 import com.example.launder.other.Resource
+import com.example.launderagent.data.entities.ShoppingItem
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,6 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.Date
+import java.util.Locale
+import java.util.Random
 import javax.inject.Inject
 
 @HiltViewModel
@@ -49,10 +54,13 @@ class MainViewModel @Inject constructor(
     private val _order = MutableLiveData<Resouce<Order>>()
     val order: LiveData<Resouce<Order>> = _order
 
+
     private val _createServiceStatus = MutableLiveData<Resouce<Any>>()
     val createServiceStatus: LiveData<Resouce<Any>> = _createServiceStatus
+
     private val _bookServiceStatus = MutableLiveData<Resouce<Any>>()
     val bookServiceStatus: LiveData<Resouce<Any>> = _bookServiceStatus
+
 
 
 
@@ -63,8 +71,11 @@ class MainViewModel @Inject constructor(
     private val _deleteServiceStatus = MutableLiveData<Resouce<Service>>()
     val deleteServiceStatus: LiveData<Resouce<Service>> = _deleteServiceStatus
 
-    private val _services = MutableLiveData<Resouce<List<Service>>>()
-    val services: LiveData<Resouce<List<Service>>> = _services
+    private val _services = MutableLiveData<List<Service>>()
+    val services: LiveData<List<Service>> = _services
+
+    private val _service = MutableLiveData<Resouce<List<Service>>>()
+    val service: LiveData<Resouce<List<Service>>> = _service
 
     private val _users = MutableLiveData<Resouce<List<User>>>()
     val users: LiveData<Resouce<List<User>>> = _users
@@ -75,10 +86,26 @@ class MainViewModel @Inject constructor(
 
     var serviceList: MutableList<Service> = mutableListOf()
 
+    private val KEY = "Saved_Shopping_List"
+
+
+    private val _cake = MutableLiveData<Resouce<Service>>()
+    val cake: LiveData<Resouce<Service>> = _cake
+
+    private val _curPrice = MutableLiveData<String>()
+    val curPrice: LiveData<String> get() = _curPrice
+    // The current cost
+
+
+
+    private val _score = MutableLiveData<Int>()
+    val score: LiveData<Int>
+        get() = _score
     init {
         if(repository.currentUser != null){
             _loginFlow.value = Resource.Success(repository.currentUser!!)
         }
+        _score.value = 1500
     }
 
     fun getUsers() {
@@ -91,11 +118,12 @@ class MainViewModel @Inject constructor(
         }
     }
     fun getService(uid:String) {
-        _services.postValue((Resouce.loading(null)))
+        _service.postValue((Resouce.loading(null)))
 
         viewModelScope.launch(dispatcher){
             val result = repository.getServices(uid)
-            _services.postValue((result))
+            _service.postValue((result))
+            _services.postValue((result.data))
         }
     }
     fun deleteService(post: Service) {
@@ -106,7 +134,31 @@ class MainViewModel @Inject constructor(
             _deleteServiceStatus.postValue((result))
         }
     }
+    fun bookServices(price:String){
+        viewModelScope.launch(dispatcher) {
+            _bookServiceStatus.postValue(((Resouce.loading(null))))
+            viewModelScope.launch(dispatcher) {
+                val result = shoppingItems.value?.let {
+                    val currentDate = Date()
+                    val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+                    val readableDate = dateFormat.format(currentDate)
+                    val random = Random().nextInt(9000) + 1000
+                    repository.bookServices(
+                        code = "#${random}",
+                        status = "Pending",
+                        bookTime = readableDate,
+                        completeTime ="Pending",
+                        prise = price,
+                        services = it
+                    )
+                }
+                _bookServiceStatus.postValue((result))
+            Log.d("resyys",result.toString())
+            }
 
+
+        }
+    }
     fun login(email: String, password: String) = viewModelScope.launch {
         _loginFlow.value = Resource.Loading()
         val result = repository.login(email, password)
@@ -167,34 +219,59 @@ class MainViewModel @Inject constructor(
     fun setCurImageUri(uri: Uri) {
         _curImageUri.postValue(uri)
     }
-    fun createService(imageUri: Uri, name:String, price:String, per:String){
-        if (name.isEmpty() || price.isEmpty()){
-            val error = applicationContext.getString(R.string.error_fill)
-            _createServiceStatus.postValue((Resouce.error(error,null)))
-        } else{
-            _createServiceStatus.postValue(((Resouce.loading(null))))
-            viewModelScope.launch(dispatcher) {
-                val result = repository.createService(imageUri,name,price,per)
-                _createServiceStatus.postValue((result))
-            }
+
+
+
+    fun setCurPrice(pr:String){
+        _curPrice.value = pr
+        _insertShoppingItemStatus.postValue(Resouce.loading(null))
+    }
+
+    fun calculate(sz: String){
+        val prc = _curPrice.value?.toInt()
+        var p = sz.toInt()
+        var s= p * prc!!
+        _score.value = s
+    }
+
+
+    var shoppingItems = repository.observeAllShoppingItems()
+
+    private val _insertShoppingItemStatus = MutableLiveData<Resouce<ShoppingItem>>()
+    val insertShoppingItemStatus: LiveData<Resouce<ShoppingItem>> = _insertShoppingItemStatus
+
+
+
+    val totalPrice = repository.observeTotalPrice()
+    fun deleteShoppingItem(shoppingItem: ShoppingItem) = viewModelScope.launch {
+        repository.deleteShoppingItem(shoppingItem)
+    }
+
+
+    fun insertShoppingItemIntoDb(shoppingItem: ShoppingItem) = viewModelScope.launch {
+        repository.insertShoppingItem(shoppingItem)
+    }
+    fun items() = viewModelScope.launch {
+        repository.observeAllShoppingItems()
+
+    }
+
+    fun insertShoppingItem(name: String, size: String, price: String,img:String) {
+        if (name.isEmpty() || size.isEmpty() || price.isEmpty()){
+            _insertShoppingItemStatus.postValue((Resouce.error("The fields must not be empty", null)))
+            return
         }
+        val shoppingItem = ShoppingItem(name, size.toInt(), price.toFloat(),img ?:"" )
+        insertShoppingItemIntoDb(shoppingItem)
+        _insertShoppingItemStatus.postValue((Resouce.success(shoppingItem)))
     }
-    fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String){
-        _bookServiceStatus.postValue(((Resouce.loading(null))))
-//        viewModelScope.launch(dispatcher) {
-//            val res = repository.getServices()
-//            val result = res.data?.let {
-//                repository.bookServices(
-//                    code,
-//                    status,
-//                    bookTime,
-//                    completeTime,
-//                    prise,
-//                    services = it
-//                )
-//            }
-//
-//            _bookServiceStatus.postValue((result))
-//        }
-    }
+
+
+
+    fun getServiceById(cakeId: String) = viewModelScope.launch {
+        _cake.postValue((Resouce.loading(null)))
+        // val cake = repository.getCakeById(cakeId)
+        cake.let {
+            //   _cake.postValue((Resouce.success(it)))
+        }}
 }

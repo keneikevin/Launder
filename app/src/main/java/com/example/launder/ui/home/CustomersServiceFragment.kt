@@ -59,6 +59,7 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
         viewModel.loadOrder(uid)
         setHasOptionsMenu(true)
 
+        requireActivity().title = "${args.currentUser.username} Services"
 //        binding.fab.setOnClickListener {
 //          viewModel.bookServices(
 //              code = "String",
@@ -70,6 +71,12 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
 //        }
         serviveAdapter.notifyDataSetChanged()
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Restore the previous title when the fragment is destroyed
+        requireActivity().title = "Launder"
     }
 
     private fun setUpRecylerView() = binding.rvCakes.apply{

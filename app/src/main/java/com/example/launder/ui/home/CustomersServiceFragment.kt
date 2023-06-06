@@ -39,13 +39,6 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
     protected open val uid:String
         get() = FirebaseAuth.getInstance().uid!!
     //private val args:CustomersServiceFragmentArgs by navArgs()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,7 +74,9 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
         layoutManager = GridLayoutManager(requireContext(),2)
         itemAnimator = null
 
-
+        binding.fab.setOnClickListener {
+            findNavController().navigate(R.id.actiontoShoppingFragment)
+        }
         serviveAdapter.notifyDataSetChanged()
     }
 

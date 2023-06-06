@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.launderagent.data.entities.ShoppingItem
+import com.google.firebase.firestore.Exclude
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
 
@@ -12,11 +13,12 @@ import kotlinx.android.parcel.RawValue
 @Entity(tableName = "orders")
 data class Order (
     @PrimaryKey()
-    val code: String ="",
-    val price: String ="",
-    val orderUid: String ="",
-    val bookTime: String ="",
-    val completeTime: String ="",
-    val status: String ="",
-    val services:@RawValue List<ShoppingItem> = listOf()
+    var code: String ="",
+    var price: String ="",
+    var orderUid: String ="",
+    var bookTime: String ="",
+    var completeTime: String ="",
+    var status: String ="",
+    @get:Exclude
+    var services:@RawValue List<ShoppingItem> = listOf()
 ):Parcelable

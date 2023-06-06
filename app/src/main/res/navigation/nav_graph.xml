@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graqph"
     app:startDestination="@id/ordersFragment">
-
+    <action
+        android:id="@+id/actiontoShoppingFragment"
+        app:destination="@id/shoppingFragment" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.launder.ui.auth.ProfileFragment"

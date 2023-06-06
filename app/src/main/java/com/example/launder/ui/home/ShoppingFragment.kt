@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.launder.R
 import com.example.launder.databinding.FragmentCartBinding
 import com.example.launder.domain.MainViewModel
+import com.example.launder.other.Status
+import com.example.launder.other.snackbar
 import com.example.launderagent.adapter.ShoppingAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +49,6 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
 
                 viewModel.bookServices(binding.total.text.toString())
 
-           //     findNavController().navigate(R.id.action_shoppingFragment_to_ordersFragment2)
             }
             builder.setNeutralButton("Cancel"){dialogInterface , which ->
                 /*NO-Op*/
@@ -85,7 +86,15 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.setCur()
+    }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.setCur()
+    }
     private fun subscribeToObservers() {
         viewModel.totalPrice.observe(viewLifecycleOwner, Observer {
             val price = it ?: 0f
@@ -94,6 +103,21 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
         })
         viewModel.shoppingItems.observe(viewLifecycleOwner, Observer {
             shoppingAdapter.shoppingItems = it
+        })
+        viewModel.bookServiceStatus.observe(viewLifecycleOwner,Observer{ result->
+            result?.let {
+                when (result.status) {
+                    Status.SUCCESS ->{
+                        binding.progressBar.visibility =  View.GONE
+                                  findNavController().popBackStack()
+                                       }
+                    Status.ERROR ->{
+                        binding.progressBar.visibility = View.GONE
+                        snackbar(it.message.toString())
+                    }
+                    Status.LOADING ->{binding.progressBar.visibility = View.GONE}
+                }
+            }
         })
 
     }

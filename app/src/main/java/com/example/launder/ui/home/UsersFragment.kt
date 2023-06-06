@@ -42,7 +42,9 @@ class UsersFragment : Fragment(R.layout.fragment_customers_service) {
 
         serviveAdapter.notifyDataSetChanged()
 
-
+            binding.fab.setOnClickListener {
+                findNavController().navigate(R.id.actiontoShoppingFragment)
+            }
 
     }
 

@@ -206,6 +206,20 @@ class mainRepositoryImpl @Inject constructor(
             Resouce.success(allPosts)
         }
     }
+    override suspend fun getOrders()= withContext(Dispatchers.IO) {
+        safeCall {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+
+            val allPosts = orders
+                .get()
+                .await()
+
+                .toObjects(Order::class.java)
+
+            Resouce.success(allPosts)
+        }
+    }
 
     override fun logout() {
         firebaseAuth.signOut()

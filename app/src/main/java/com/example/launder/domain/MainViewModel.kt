@@ -79,6 +79,8 @@ class MainViewModel @Inject constructor(
 
     private val _users = MutableLiveData<Resouce<List<User>>>()
     val users: LiveData<Resouce<List<User>>> = _users
+  private val _orders = MutableLiveData<Resouce<List<Order>>>()
+    val orders: LiveData<Resouce<List<Order>>> = _orders
 
     val currentUser: FirebaseUser?
         get() = repository.currentUser
@@ -108,6 +110,18 @@ class MainViewModel @Inject constructor(
         _score.value = 1500
     }
 
+    fun getOrders() {
+        _orders.postValue((Resouce.loading(null)))
+
+        viewModelScope.launch(dispatcher){
+            val result = repository.getOrders()
+            Log.d("tttttuu", result.toString())
+            _orders.postValue((result))
+        }
+    }
+    fun setCur(){
+        _bookServiceStatus.postValue(Resouce.loading(null))
+    }
     fun getUsers() {
         _users.postValue((Resouce.loading(null)))
 
@@ -197,7 +211,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             val result = repository.getOrder(uid)
             _order.postValue((result))
-            Log.d("gaga", order.value?.data.toString())
+            Log.d("gaga", order.value.toString())
         }
         //getPosts(uid)
     }

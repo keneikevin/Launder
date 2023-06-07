@@ -112,6 +112,7 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
             result?.let {
                 when (result.status) {
                     Status.SUCCESS ->{
+                        viewModel.deleteAll()
                         binding.progressBar.visibility =  View.GONE
                                   findNavController().navigate(R.id.action_shoppingFragment_to_ordersFragment2)
                                        }

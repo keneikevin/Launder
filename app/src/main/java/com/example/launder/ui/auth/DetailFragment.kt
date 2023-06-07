@@ -91,7 +91,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
                         Snackbar.make(
                             binding.root,
                             result.message ?: "Added to Cart",
-                            Snackbar.LENGTH_LONG
+                            Snackbar.LENGTH_SHORT
                         ).show()
                         findNavController().popBackStack()
                   }

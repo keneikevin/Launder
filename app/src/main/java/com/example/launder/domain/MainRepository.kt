@@ -37,6 +37,7 @@ interface mainRepository {
     suspend fun insertShoppingItem(shoppingItem: ShoppingItem)
 
     suspend fun deleteShoppingItem(shoppingItem: ShoppingItem)
+    suspend fun deleteAllShoppingItems()
 
     fun observeAllShoppingItems(): LiveData<List<ShoppingItem>>
 

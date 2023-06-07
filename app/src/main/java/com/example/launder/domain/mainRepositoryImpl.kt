@@ -140,10 +140,10 @@ class mainRepositoryImpl @Inject constructor(
     }
 
     override fun observeAllShoppingItems(): LiveData<List<ShoppingItem>> {
-        val ua = shoppingDao.observeAllShoppingItems()
         return shoppingDao.observeAllShoppingItems()
-
-
+    }
+ override suspend fun deleteAllShoppingItems() {
+        return shoppingDao.deleteAllShoppingItems()
     }
 
     override fun observeTotalPrice(): LiveData<Float> {

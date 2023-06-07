@@ -158,10 +158,12 @@ class MainViewModel @Inject constructor(
         }
     }
     fun bookServices(price:String){
+
         viewModelScope.launch(dispatcher) {
             _bookServiceStatus.postValue(((Resouce.loading(null))))
             viewModelScope.launch(dispatcher) {
                 val result = shoppingItems.value?.let {
+
                     val currentDate = Date()
                     val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
                     val readableDate = dateFormat.format(currentDate)
@@ -268,6 +270,10 @@ class MainViewModel @Inject constructor(
     }
     fun items() = viewModelScope.launch {
         repository.observeAllShoppingItems()
+
+    }
+ fun deleteAll() = viewModelScope.launch {
+        repository.deleteAllShoppingItems()
 
     }
 

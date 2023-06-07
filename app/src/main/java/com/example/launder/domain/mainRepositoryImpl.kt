@@ -125,20 +125,12 @@ class mainRepositoryImpl @Inject constructor(
             val user = users.document(uid).get().await().toObject(User::class.java)
                 ?: throw IllegalStateException()
             val currentUid = FirebaseAuth.getInstance().uid!!
-            val currentUser = users.document(currentUid).get().await().toObject(User::class.java)
-                ?: throw IllegalStateException()
+
 
             Resouce.success(user)
         }
     }
-    override suspend fun getOrder(uid: String) = withContext(Dispatchers.IO) {
-        safeCall {
-            val order = orders.document(uid).get().await().toObject(Order::class.java)
-                ?: throw IllegalStateException()
-            Log.d("hgshgsdada", order.toString())
-            Resouce.success(order)
-        }
-    }
+
     override suspend fun insertShoppingItem(shoppingItem: ShoppingItem) {
         shoppingDao.insertShoppingItem(shoppingItem)
     }
@@ -174,19 +166,19 @@ class mainRepositoryImpl @Inject constructor(
             Resource.Error(e.localizedMessage)
         }
     }
-    override suspend fun getServices(uiid: String) = withContext(Dispatchers.IO) {
+    override suspend fun getServices() = withContext(Dispatchers.IO) {
         safeCall {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
 
 
-            val allPosts = cakes.whereEqualTo("authorUid", uiid)
+            val allPosts = cakes
                 //  .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .await()
 
                 .toObjects(Service::class.java)
 
-            Log.d("dadada", allPosts.toString())
+
             Resouce.success(allPosts)
         }
     }
@@ -209,14 +201,24 @@ class mainRepositoryImpl @Inject constructor(
     override suspend fun getOrders()= withContext(Dispatchers.IO) {
         safeCall {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
-
-
             val allPosts = orders
+                .get()
+                .await()
+                .toObjects(Order::class.java)
+
+            Resouce.success(allPosts)
+        }
+    }
+    override suspend fun getOrder() = withContext(Dispatchers.IO) {
+        safeCall {
+
+            val allPosts = orders.whereEqualTo("orderUid", firebaseAuth.uid!!)
                 .get()
                 .await()
 
                 .toObjects(Order::class.java)
 
+            Log.d("dadada", allPosts.toString())
             Resouce.success(allPosts)
         }
     }

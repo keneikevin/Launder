@@ -1,9 +1,6 @@
 package com.example.launder.ui.auth
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,13 +9,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
 import com.example.launder.R
-import com.example.launder.databinding.FragmentCustomersServiceBinding
 import com.example.launder.databinding.FragmentOrderBinding
 import com.example.launder.domain.MainViewModel
 import com.example.launder.other.Status
 import com.example.launder.other.snackbar
 import com.example.launderagent.adapterpackage.OrdersAdapter
-import com.example.launderagent.adapterpackage.UsersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -34,26 +29,6 @@ class OrdersFragment : Fragment(R.layout.fragment_order) {
 
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.cart_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_cart -> {
-                findNavController().navigate(R.id.action_ordersFragment_to_shoppingFragment)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,10 +36,20 @@ class OrdersFragment : Fragment(R.layout.fragment_order) {
         binding = FragmentOrderBinding.bind(view)
         subscribeToObservers()
         setUpRecylerView()
-
+        requireActivity().title = "My Orders"
         serviveAdapter.notifyDataSetChanged()
-
+        binding.fab.setOnClickListener {
+            findNavController().navigate(R.id.actiontoShoppingFragment)
+        }
     }
+
+    override fun onPause() {
+        super.onPause()
+        // Restore the previous title when the fragment is destroyed
+        requireActivity().title = "Launder"
+        viewModel.setCur()
+    }
+
 
     private fun setUpRecylerView() = binding.rvCakes.apply{
         viewModel.getOrders()

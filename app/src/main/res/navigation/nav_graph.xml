@@ -15,9 +15,6 @@
             app:destination="@id/editProfileFragment"
             app:popUpTo="@id/profileFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_profileFragment_to_shoppingFragment"
-            app:destination="@id/shoppingFragment" />
     </fragment>
 
 
@@ -41,27 +38,20 @@
             android:id="@+id/action_shoppingFragment_to_ordersFragment2"
             app:destination="@id/ordersFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/usersFragment"
-        android:name="com.example.launder.ui.home.customer.UsersFragment"
-        android:label="UsersFragment" >
-        <action
-            android:id="@+id/action_usersFragment_to_customersServiceFragment"
-            app:destination="@id/customersServiceFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/customersServiceFragment"
-        android:name="com.example.launder.ui.home.customer.CustomersServiceFragment"
-        android:label="CustomersServiceFragment">
+        android:id="@+id/serviceFragment"
+        android:name="com.example.launder.ui.home.customer.ServiceFragment"
+        android:label="ServiceFragment">
 
         <argument
             android:name="currentUser"
             app:argType="com.example.launder.data.User" />
         <action
-            android:id="@+id/action_customersServiceFragment_to_detailFragment"
+            android:id="@+id/action_serviceFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
         <action
-            android:id="@+id/action_customersServiceFragment_to_shoppingFragment"
+            android:id="@+id/action_serviceFragment_to_shoppingFragment"
             app:destination="@id/shoppingFragment" />
     </fragment>
     <fragment

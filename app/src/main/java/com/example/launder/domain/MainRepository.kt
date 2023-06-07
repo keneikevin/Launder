@@ -26,14 +26,14 @@ interface mainRepository {
 
 
 
-    suspend fun getServices(uid:String): Resouce<List<Service>>
+    suspend fun getServices(): Resouce<List<Service>>
     suspend fun getUsers(): Resouce<List<User>>
     suspend fun getOrders(): Resouce<List<Order>>
     suspend fun signup(name: String, email: String, password: String,phone:String): Resource<FirebaseUser>
     fun logout()
     suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String,services:List<ShoppingItem>):Resouce<Any>
 
-    suspend fun getOrder(uid: String): Resouce<Order>
+    suspend fun getOrder(): Resouce<List<Order>>
     suspend fun insertShoppingItem(shoppingItem: ShoppingItem)
 
     suspend fun deleteShoppingItem(shoppingItem: ShoppingItem)

@@ -64,11 +64,18 @@ class ProfileFragment :Fragment(R.layout.fragment_profile){
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        // Restore the previous title when the fragment is destroyed
+        requireActivity().title = "Launder"
+    }
+
     private fun subscribeToObservers(){
         viewModel.profileMeta.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 when (result.status) {
                     Status.SUCCESS ->{
+                        requireActivity().title = "Welcome: ${it.data?.username.toString()}"
                         binding.etShoppingItemName.text= it.data?.username
                         binding.eEmail.text= it.data?.email
                         binding.ePhone.text= it.data?.phone

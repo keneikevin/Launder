@@ -1,15 +1,10 @@
 package com.example.launder.ui.home.customer
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
@@ -25,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
+class ServiceFragment : Fragment(R.layout.fragment_customers_service) {
 
     @Inject
     lateinit var glide:RequestManager
@@ -34,7 +29,7 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
     private lateinit var binding: FragmentCustomersServiceBinding
     private lateinit var sss: List<Service>
     private val viewModel: MainViewModel by viewModels()
-    private val args:CustomersServiceFragmentArgs by navArgs()
+//    private val args:CustomersServiceFragmentArgs by navArgs()
 
     protected open val uid:String
         get() = FirebaseAuth.getInstance().uid!!
@@ -43,10 +38,10 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCustomersServiceBinding.bind(view)
-        if (args.currentUser.uid.isNotEmpty()){
-            viewModel.getService(args.currentUser.uid)
+
+            viewModel.getService()
             subscribeToObservers()
-        }
+
         subscribeToObservers()
         setUpRecylerView()
         viewModel.loadOrder(uid)
@@ -55,14 +50,8 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
 
         serviveAdapter.notifyDataSetChanged()
 
-        requireActivity().title = "${args.currentUser.username} Services"
     }
 
-    override fun onPause() {
-        super.onPause()
-        // Restore the previous title when the fragment is destroyed
-        requireActivity().title = "Launder"
-    }
 
     private fun setUpRecylerView() = binding.rvCakes.apply{
 
@@ -74,9 +63,7 @@ class CustomersServiceFragment : Fragment(R.layout.fragment_customers_service) {
         layoutManager = GridLayoutManager(requireContext(),2)
         itemAnimator = null
 
-        binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.actiontoShoppingFragment)
-        }
+
         serviveAdapter.notifyDataSetChanged()
     }
 

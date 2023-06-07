@@ -51,8 +51,8 @@ class MainViewModel @Inject constructor(
     private val _profileMeta = MutableLiveData<Resouce<User>>()
     val profileMeta: LiveData<Resouce<User>> = _profileMeta
 
-    private val _order = MutableLiveData<Resouce<Order>>()
-    val order: LiveData<Resouce<Order>> = _order
+    private val _order = MutableLiveData<Resouce<List<Order>>>()
+    val order: LiveData<Resouce<List<Order>>> = _order
 
 
     private val _createServiceStatus = MutableLiveData<Resouce<Any>>()
@@ -114,10 +114,19 @@ class MainViewModel @Inject constructor(
         _orders.postValue((Resouce.loading(null)))
 
         viewModelScope.launch(dispatcher){
-            val result = repository.getOrders()
+            val result = repository.getOrder()
             Log.d("tttttuu", result.toString())
             _orders.postValue((result))
         }
+    }
+    fun loadOrder(uid: String) {
+//        _order.postValue((Resouce.loading(null)))
+//        viewModelScope.launch(dispatcher) {
+//            val result = repository.getOrder(uid)
+//            _order.postValue((result))
+//            Log.d("uwdguwdg", result.toString())
+//        }
+//        //getPosts(uid)
     }
     fun setCur(){
         _bookServiceStatus.postValue(Resouce.loading(null))
@@ -131,11 +140,11 @@ class MainViewModel @Inject constructor(
             _users.postValue((result))
         }
     }
-    fun getService(uid:String) {
+    fun getService() {
         _service.postValue((Resouce.loading(null)))
 
         viewModelScope.launch(dispatcher){
-            val result = repository.getServices(uid)
+            val result = repository.getServices()
             _service.postValue((result))
             _services.postValue((result.data))
         }
@@ -206,15 +215,7 @@ class MainViewModel @Inject constructor(
         }
         //getPosts(uid)
     }
-    fun loadOrder(uid: String) {
-        _profileMeta.postValue((Resouce.loading(null)))
-        viewModelScope.launch(dispatcher) {
-            val result = repository.getOrder(uid)
-            _order.postValue((result))
-            Log.d("gaga", order.value.toString())
-        }
-        //getPosts(uid)
-    }
+
     fun updateProfile(profileUpdate: ProfileUpdate){
         if (profileUpdate.username.length < MIN_USER_NAME){
             val error = applicationContext.getString(R.string.error_username_too_short)

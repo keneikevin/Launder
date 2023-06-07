@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.launder.data.Service
 import com.example.launder.databinding.ServiceCustomerBinding
-import com.example.launder.ui.home.customer.CustomersServiceFragmentDirections
+import com.example.launder.ui.home.customer.ServiceFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
@@ -66,7 +66,7 @@ class ServiceCustomerAdapter @Inject constructor(
             tvPostText.text = pr
            // tvPer.text = post.per
             cad.setOnClickListener {
-                val directions= CustomersServiceFragmentDirections.actionCustomersServiceFragmentToDetailFragment(service)
+                val directions= ServiceFragmentDirections.actionServiceFragmentToDetailFragment(service)
                 it.findNavController().navigate(directions)
                 Snackbar.make(this.itemView, "Swipe", Snackbar.LENGTH_SHORT).show()
             }

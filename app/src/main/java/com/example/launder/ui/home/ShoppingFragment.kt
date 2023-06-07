@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -25,18 +26,18 @@ import dagger.hilt.android.AndroidEntryPoint
 class ShoppingFragment :Fragment(R.layout.fragment_cart) {
 
     private lateinit var binding: FragmentCartBinding
-    lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
+
     private lateinit var shoppingAdapter: ShoppingAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+
         binding = FragmentCartBinding.bind(view)
         subscribeToObservers()
         setupRecyclerView()
 
-
-
+        requireActivity().title = "My Cart"
 
         binding.fab.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
@@ -90,11 +91,14 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
         super.onDestroy()
         viewModel.setCur()
     }
-
     override fun onPause() {
         super.onPause()
+        // Restore the previous title when the fragment is destroyed
+        requireActivity().title = "Launder"
         viewModel.setCur()
     }
+
+
     private fun subscribeToObservers() {
         viewModel.totalPrice.observe(viewLifecycleOwner, Observer {
             val price = it ?: 0f
@@ -109,7 +113,7 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
                 when (result.status) {
                     Status.SUCCESS ->{
                         binding.progressBar.visibility =  View.GONE
-                                  findNavController().popBackStack()
+                                  findNavController().navigate(R.id.action_shoppingFragment_to_ordersFragment2)
                                        }
                     Status.ERROR ->{
                         binding.progressBar.visibility = View.GONE

@@ -2,6 +2,7 @@ package com.example.launderagent.adapterpackage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
@@ -12,8 +13,8 @@ import com.bumptech.glide.RequestManager
 import com.example.launder.data.Order
 import com.example.launder.data.Service
 import com.example.launder.data.User
+import com.example.launder.databinding.OrderBinding
 import com.example.launder.databinding.UserBinding
-import com.example.launder.ui.home.customer.UsersFragmentDirections
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
@@ -21,9 +22,9 @@ class OrdersAdapter @Inject constructor(
     private val glide: RequestManager
 ) : RecyclerView.Adapter<OrdersAdapter.PostViewHolder>() {
 
-    class PostViewHolder(val binding: UserBinding) : RecyclerView.ViewHolder(binding.root) {
-        val ivPostImage: ImageView = binding.img
+    class PostViewHolder(val binding: OrderBinding) : RecyclerView.ViewHolder(binding.root) {
         val tvPostAuthor: TextView = binding.textName
+        val bt: Button = binding.img
         val tvPostText: TextView = binding.per2
         val cad = binding.cad
     }
@@ -46,7 +47,7 @@ class OrdersAdapter @Inject constructor(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         return PostViewHolder(
-            UserBinding.inflate(
+            OrderBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -62,8 +63,12 @@ class OrdersAdapter @Inject constructor(
         val post = posts[position]
         holder.apply {
           //  glide.load(post.profilePictureUrl).into(ivPostImage)
-            tvPostAuthor.text = post.code
-            tvPostText.text = post.status
+            tvPostAuthor.text = post.status
+
+            var tt = "${post.bookTime}   |   3 items   |   ${post.price}"
+
+            tvPostText.text = tt
+           binding.img.text = post.status
             cad.setOnClickListener {
                 Snackbar.make(this.itemView, "Swipe ..", Snackbar.LENGTH_SHORT).show()
             //    val directions= UsersFragmentDirections.actionUsersFragmentToCustomersServiceFragment(post)

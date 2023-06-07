@@ -59,11 +59,12 @@ class mainRepositoryImpl @Inject constructor(
             val post = Order(
                 code = code,
                 price = prise,
-                orderUid = uid,
+                orderId = oderId,
                 bookTime = bookTime,
                 completeTime = completeTime,
                 status = status,
-                services = services
+                services = services,
+                oderUid = uid
             )
             orders.document(oderId).set(post).await()
             Resouce.success(Any())
@@ -211,8 +212,11 @@ class mainRepositoryImpl @Inject constructor(
     }
     override suspend fun getOrder() = withContext(Dispatchers.IO) {
         safeCall {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-            val allPosts = orders.whereEqualTo("orderUid", firebaseAuth.uid!!)
+
+            val allPosts = orders
+                .whereEqualTo("oderUid", uid)
                 .get()
                 .await()
 

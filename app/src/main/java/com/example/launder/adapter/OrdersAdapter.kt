@@ -3,18 +3,14 @@ package com.example.launderagent.adapterpackage
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.launder.data.Order
 import com.example.launder.data.Service
-import com.example.launder.data.User
 import com.example.launder.databinding.OrderBinding
-import com.example.launder.databinding.UserBinding
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
@@ -35,7 +31,7 @@ class OrdersAdapter @Inject constructor(
         }
 
         override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
-            return oldItem.orderUid == newItem.orderUid
+            return oldItem.orderId == newItem.orderId
         }
     }
 

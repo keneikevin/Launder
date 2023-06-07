@@ -66,7 +66,7 @@ class OrdersAdapter @Inject constructor(
             tvPostText.text = tt
            binding.img.text = post.status
             cad.setOnClickListener {
-                Snackbar.make(this.itemView, "Swipe ..", Snackbar.LENGTH_SHORT).show()
+               // Snackbar.make(this.itemView, "Swipe ..", Snackbar.LENGTH_SHORT).show()
             //    val directions= UsersFragmentDirections.actionUsersFragmentToCustomersServiceFragment(post)
               //  it.findNavController().navigate(directions)
 

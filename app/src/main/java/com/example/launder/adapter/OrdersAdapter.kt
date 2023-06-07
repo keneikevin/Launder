@@ -60,7 +60,7 @@ class OrdersAdapter @Inject constructor(
         holder.apply {
           //  glide.load(post.profilePictureUrl).into(ivPostImage)
             tvPostAuthor.text = post.status
-
+            var no = post.services.size
             var tt = "${post.bookTime}   |   3 items   |   ${post.price}"
 
             tvPostText.text = tt

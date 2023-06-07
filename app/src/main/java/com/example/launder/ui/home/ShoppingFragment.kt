@@ -41,7 +41,7 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
 
         binding.fab.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Cake City")
+            builder.setTitle("Launder")
             val sizePice = "Proceed to checkout?    subtotal ${binding.total.text} "
             builder.setMessage(sizePice)
             builder.setIcon(R.drawable.a)

@@ -1,5 +1,6 @@
 package com.example.launderagent.adapterpackage
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -65,6 +66,12 @@ class OrdersAdapter @Inject constructor(
 
             tvPostText.text = tt
            binding.img.text = post.status
+            when (post.status) {
+                "Pending" ->    binding.img.setBackgroundColor(Color.BLUE)
+                "Accepted" ->    binding.img.setBackgroundColor(Color.YELLOW)
+                "Status" ->    binding.img.setBackgroundColor(Color.GREEN)
+                else ->     binding.img.setBackgroundColor(Color.RED)
+            }
             cad.setOnClickListener {
                // Snackbar.make(this.itemView, "Swipe ..", Snackbar.LENGTH_SHORT).show()
             //    val directions= UsersFragmentDirections.actionUsersFragmentToCustomersServiceFragment(post)

@@ -81,9 +81,9 @@ class OrdersAdapter @Inject constructor(
                 }
             }
             tvPostText.text = tt
-            binding.img.text = post.status
-            cad.setOnClickListener {
-
+binding.img.text = post.status
+           cad.setOnClickListener {
+             
                 val directions = OrdersFragmentDirections.actionOrdersFragmentToEditOrderFragment(post)
               it.findNavController().navigate(directions)
             }

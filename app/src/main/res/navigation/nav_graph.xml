@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graqph"
-    app:startDestination="@id/ordersFragment">
+    app:startDestination="@id/serviceFragment">
     <action
         android:id="@+id/actiontoShoppingFragment"
         app:destination="@id/shoppingFragment" />

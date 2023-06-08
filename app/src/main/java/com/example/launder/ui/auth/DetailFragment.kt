@@ -42,7 +42,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
         viewModel.items()
 
         binding.etShoppingItemName.text = args.currentService.title
-        binding.per.text = "${args.currentService.per}s"
+        binding.per.text = "${args.currentService.per}"
         binding.picker.minValue = 1
         binding.picker.maxValue = 10
         binding.picker.setOnValueChangedListener{ picker, oldVal, newVal ->
@@ -58,7 +58,8 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
                 binding.etShoppingItemName.text.toString(),
                 binding.picker.value.toString(),
                 binding.imageView7.text.toString(),
-                args.currentService.img.toString()
+                args.currentService.img.toString(),
+                binding.per.text.toString()
             )
 
         }
@@ -88,11 +89,7 @@ class DetailFragment: Fragment(R.layout.fragment_detail) {
                     }
 
                     Status.SUCCESS -> {
-                        Snackbar.make(
-                            binding.root,
-                            result.message ?: "Added to Cart",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
+                        Snackbar.make(binding.root, "Added to Cat", Snackbar.LENGTH_SHORT).show()
                         findNavController().popBackStack()
                   }
                     Status.LOADING -> {

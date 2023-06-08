@@ -8,7 +8,7 @@ import com.example.launderagent.data.entities.ShoppingItem
 
 @Database(
     entities = [ShoppingItem::class, Service::class],
-    version = 5
+    version = 6
 )
 abstract class ShoppingItemDatabase: RoomDatabase() {
     abstract fun shoppingDao(): ShoppingDao

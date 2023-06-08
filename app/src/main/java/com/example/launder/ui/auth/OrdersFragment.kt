@@ -1,6 +1,7 @@
 package com.example.launder.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -66,7 +67,9 @@ class OrdersFragment : Fragment(R.layout.fragment_order) {
 
 
     private fun subscribeToObservers(){
-
+        viewModel.shoppingItems.observe(viewLifecycleOwner, Observer {
+            Log.d("kakka", it.toString())
+        })
         viewModel.orders.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 when (result.status) {

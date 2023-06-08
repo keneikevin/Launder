@@ -3,6 +3,7 @@ package com.example.launder.domain
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import com.example.launder.data.Order
+import com.example.launder.data.OrderUpdate
 import com.example.launder.data.ProfileUpdate
 import com.example.launder.data.Service
 import com.example.launder.data.User
@@ -32,10 +33,10 @@ interface mainRepository {
     suspend fun signup(name: String, email: String, password: String,phone:String): Resource<FirebaseUser>
     fun logout()
     suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String,services:List<ShoppingItem>):Resouce<Any>
-
+    suspend fun deleteOrder(post: Order): Resouce<Order>
     suspend fun getOrder(): Resouce<List<Order>>
     suspend fun insertShoppingItem(shoppingItem: ShoppingItem)
-
+    suspend fun updateOrder(profileUpdate: OrderUpdate): Resouce<Any>
     suspend fun deleteShoppingItem(shoppingItem: ShoppingItem)
     suspend fun deleteAllShoppingItems()
 

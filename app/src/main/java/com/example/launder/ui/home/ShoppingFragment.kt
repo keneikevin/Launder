@@ -19,6 +19,7 @@ import com.example.launder.domain.MainViewModel
 import com.example.launder.other.Status
 import com.example.launder.other.snackbar
 import com.example.launderagent.adapter.ShoppingAdapter
+import com.example.launderagent.data.entities.ShoppingItem
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,6 +30,7 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var shoppingAdapter: ShoppingAdapter
+    private lateinit var shoppingItems: List<ShoppingItem>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +40,6 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
         setupRecyclerView()
 
         requireActivity().title = "My Cart"
-
         binding.fab.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("Launder")
@@ -48,7 +49,7 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
             //performing positive action
             builder.setPositiveButton("Yes"){dialogInterface, which ->
 
-                viewModel.bookServices(binding.total.text.toString())
+                viewModel.bookServices(binding.total.text.toString(),shoppingItems)
 
             }
             builder.setNeutralButton("Cancel"){dialogInterface , which ->
@@ -107,6 +108,7 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
         })
         viewModel.shoppingItems.observe(viewLifecycleOwner, Observer {
             shoppingAdapter.shoppingItems = it
+            shoppingItems = it
         })
         viewModel.bookServiceStatus.observe(viewLifecycleOwner,Observer{ result->
             result?.let {
@@ -115,7 +117,8 @@ class ShoppingFragment :Fragment(R.layout.fragment_cart) {
                         viewModel.deleteAll()
                         binding.progressBar.visibility =  View.GONE
                                   findNavController().navigate(R.id.action_shoppingFragment_to_ordersFragment2)
-                                       }
+                        snackbar("Order Booked")
+                    }
                     Status.ERROR ->{
                         binding.progressBar.visibility = View.GONE
                         snackbar(it.message.toString())

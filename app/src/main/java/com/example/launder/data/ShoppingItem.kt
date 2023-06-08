@@ -9,6 +9,7 @@ data class ShoppingItem(
     var size:Int,
     var price:Float,
     var imageUrl: String,
+    var per: String,
     @PrimaryKey(autoGenerate = true)
     val id:Int? = null
 )

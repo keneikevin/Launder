@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.launder.R
 import com.example.launder.data.Order
+import com.example.launder.data.OrderUpdate
 import com.example.launder.data.ProfileUpdate
 import com.example.launder.data.Service
 import com.example.launder.data.User
@@ -61,6 +62,8 @@ class MainViewModel @Inject constructor(
     private val _bookServiceStatus = MutableLiveData<Resouce<Any>>()
     val bookServiceStatus: LiveData<Resouce<Any>> = _bookServiceStatus
 
+    private val _updateOrderStatus = MutableLiveData<Resouce<Any>>()
+    val updateOrderStatus: LiveData<Resouce<Any>> = _updateOrderStatus
 
 
 
@@ -98,6 +101,8 @@ class MainViewModel @Inject constructor(
     val curPrice: LiveData<String> get() = _curPrice
     // The current cost
 
+    private val _deleteOrderStatus = MutableLiveData<Resouce<Order>>()
+    val deleteOrderStatus: LiveData<Resouce<Order>> = _deleteOrderStatus
 
 
     private val _score = MutableLiveData<Int>()
@@ -120,16 +125,27 @@ class MainViewModel @Inject constructor(
         }
     }
     fun loadOrder(uid: String) {
-//        _order.postValue((Resouce.loading(null)))
-//        viewModelScope.launch(dispatcher) {
-//            val result = repository.getOrder(uid)
-//            _order.postValue((result))
-//            Log.d("uwdguwdg", result.toString())
-//        }
-//        //getPosts(uid)
+
+    }
+    fun deleteOrder(post: Order) {
+        _deleteOrderStatus.postValue((Resouce.loading(null)))
+
+        viewModelScope.launch(dispatcher) {
+            val result = repository.deleteOrder(post)
+            _deleteOrderStatus.postValue((result))
+        }
     }
     fun setCur(){
         _bookServiceStatus.postValue(Resouce.loading(null))
+    }
+    fun updateOrder(profileUpdate: OrderUpdate){
+        _updateOrderStatus.postValue((Resouce.loading(null)))
+        viewModelScope.launch(dispatcher){
+            val result = repository.updateOrder(profileUpdate)
+            _updateOrderStatus.postValue((result))
+
+        }
+
     }
     fun getUsers() {
         _users.postValue((Resouce.loading(null)))
@@ -157,28 +173,29 @@ class MainViewModel @Inject constructor(
             _deleteServiceStatus.postValue((result))
         }
     }
-    fun bookServices(price:String){
+    fun bookServices(price: String, shoppingItems: List<ShoppingItem>){
 
         viewModelScope.launch(dispatcher) {
             _bookServiceStatus.postValue(((Resouce.loading(null))))
             viewModelScope.launch(dispatcher) {
-                val result = shoppingItems.value?.let {
-
+                val repo = repository.observeAllShoppingItems()
                     val currentDate = Date()
                     val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
                     val readableDate = dateFormat.format(currentDate)
                     val random = Random().nextInt(9000) + 1000
-                    repository.bookServices(
+                    val result =  repository.bookServices(
                         code = "#${random}",
                         status = "Pending",
                         bookTime = readableDate,
                         completeTime ="Pending",
                         prise = price,
-                        services = it
+                        services = shoppingItems
                     )
-                }
+                Log.d("ajhgj", shoppingItems.toString())
+                Log.d("jyuy", repo.value.toString())
+                Log.d("7u8uw", result.toString())
                 _bookServiceStatus.postValue((result))
-            Log.d("resyys",result.toString())
+
             }
 
 
@@ -277,16 +294,15 @@ class MainViewModel @Inject constructor(
 
     }
 
-    fun insertShoppingItem(name: String, size: String, price: String,img:String) {
+    fun insertShoppingItem(name: String, size: String, price: String,img:String,per:String) {
         if (name.isEmpty() || size.isEmpty() || price.isEmpty()){
             _insertShoppingItemStatus.postValue((Resouce.error("The fields must not be empty", null)))
             return
         }
-        val shoppingItem = ShoppingItem(name, size.toInt(), price.toFloat(),img ?:"" )
+        val shoppingItem = ShoppingItem(name, size.toInt(), price.toFloat(),img ?:"",per )
         insertShoppingItemIntoDb(shoppingItem)
         _insertShoppingItemStatus.postValue((Resouce.success(shoppingItem)))
     }
-
 
 
     fun getServiceById(cakeId: String) = viewModelScope.launch {

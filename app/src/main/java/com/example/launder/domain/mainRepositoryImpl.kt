@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.launder.data.Order
+import com.example.launder.data.OrderUpdate
 import com.example.launder.data.ProfileUpdate
 import com.example.launder.data.Service
 import com.example.launder.data.User
@@ -48,8 +49,6 @@ class mainRepositoryImpl @Inject constructor(
             Resource.Error(e.localizedMessage)
         }
     }
-
-
     override suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String,services:List<ShoppingItem>) = withContext(Dispatchers.IO) {
         safeCall {
             val uid = firebaseAuth.uid!!
@@ -70,6 +69,35 @@ class mainRepositoryImpl @Inject constructor(
             Resouce.success(Any())
         }
     }
+    override suspend fun updateOrder(profileUpdate: OrderUpdate) = withContext(Dispatchers.IO) {
+        safeCall {
+//            val imageUrl = profileUpdate.profilePictureUri?.let { uri ->
+//                updateProfilePicture(profileUpdate.uidToUpdate, uri).toString()
+//            }
+
+            val uid = firebaseAuth.uid!!
+            val postId = UUID.randomUUID().toString()
+
+            val map = mutableMapOf(
+                "completeTime" to profileUpdate.completeTime,
+                "status" to profileUpdate.status,
+                "orderId" to profileUpdate.orderId,
+            )
+
+            orders.document(profileUpdate.orderId).update(map.toMap()).await()
+            Resouce.success(Any())
+        }
+
+    }
+
+    override suspend fun deleteOrder(post: Order) = withContext(Dispatchers.IO) {
+        safeCall {
+            orders.document(post.orderId).delete().await()
+            // storage.getReferenceFromUrl(post.img).delete().await()
+            Resouce.success(post)
+        }
+    }
+
 
 
     override suspend fun updateProfilePicture(uid: String, imageUri: Uri) = withContext(Dispatchers.IO) {

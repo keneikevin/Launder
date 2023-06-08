@@ -61,6 +61,9 @@
         <action
             android:id="@+id/action_ordersFragment_to_shoppingFragment"
             app:destination="@id/shoppingFragment" />
+        <action
+            android:id="@+id/action_ordersFragment_to_editOrderFragment"
+            app:destination="@id/editOrderFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailFragment"
@@ -69,5 +72,13 @@
         <argument
             android:name="currentService"
             app:argType="com.example.launder.data.Service" />
+    </fragment>
+    <fragment
+        android:id="@+id/editOrderFragment"
+        android:name="com.example.launder.ui.home.customer.EditOrderFragment"
+        android:label="EditOrderFragment" >
+    <argument
+        android:name="currentOrder"
+        app:argType="com.example.launder.data.Order" />
     </fragment>
 </navigation>

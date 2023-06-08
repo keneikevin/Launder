@@ -1,17 +1,18 @@
 package com.example.launderagent.adapterpackage
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.example.launder.data.Order
-import com.example.launder.data.Service
 import com.example.launder.databinding.OrderBinding
-import com.google.android.material.snackbar.Snackbar
+import com.example.launder.ui.auth.OrdersFragmentDirections
 import javax.inject.Inject
 
 class OrdersAdapter @Inject constructor(
@@ -31,7 +32,7 @@ class OrdersAdapter @Inject constructor(
         }
 
         override fun areItemsTheSame(oldItem: Order, newItem: Order): Boolean {
-            return oldItem.orderId == newItem.orderId
+            return oldItem.oderUid == newItem.oderUid
         }
     }
 
@@ -58,33 +59,89 @@ class OrdersAdapter @Inject constructor(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
         holder.apply {
-          //  glide.load(post.profilePictureUrl).into(ivPostImage)
-            tvPostAuthor.text = post.status
-            var no = post.services.size
+            //  glide.load(post.profilePictureUrl).into(ivPostImage)
+            tvPostAuthor.text = post.code
+
             var tt = "${post.bookTime}   |   3 items   |   ${post.price}"
+            when (post.status) {
+                "Pending" -> {
+                    binding.img.setBackgroundColor(Color.parseColor("#0000FF"))
+                }
 
+                "Accepted" -> {
+                    binding.img.setBackgroundColor(Color.parseColor("#800000"))
+                }
+                "Processing" -> {
+                    binding.img.setBackgroundColor(Color.parseColor("#808080"))
+                }
+                "Complete" -> {
+                    binding.img.setBackgroundColor(Color.parseColor("#006400"))}
+                else ->  {
+                    binding.img.setBackgroundColor(Color.RED)
+                }
+            }
             tvPostText.text = tt
-           binding.img.text = post.status
+            binding.img.text = post.status
             cad.setOnClickListener {
-               // Snackbar.make(this.itemView, "Swipe ..", Snackbar.LENGTH_SHORT).show()
-            //    val directions= UsersFragmentDirections.actionUsersFragmentToCustomersServiceFragment(post)
-              //  it.findNavController().navigate(directions)
 
+                val directions = OrdersFragmentDirections.actionOrdersFragmentToEditOrderFragment(post)
+              it.findNavController().navigate(directions)
             }
 
         }
     }
 
-    private var onDeletePostClickListener: ((Service) -> Unit)? = null
-
-
-
-    fun setOnDeletePostClickListener(listener: (Service) -> Unit) {
-        onDeletePostClickListener = listener
-    }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

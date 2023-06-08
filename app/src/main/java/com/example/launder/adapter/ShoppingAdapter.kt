@@ -59,7 +59,7 @@ class ShoppingAdapter @Inject constructor(
                 .diskCacheStrategy(DiskCacheStrategy.DATA))
                 .load(shoppingItem.imageUrl).into(image)
             tvName.text = shoppingItem.name
-            val sizeText = "${shoppingItem.size}KG"
+            val sizeText = "${shoppingItem.size}${ shoppingItem.per}"
             tvSize.text = sizeText
             val priceText = "${shoppingItem.price}0Ksh"
             tvPrice.text = priceText

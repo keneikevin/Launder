@@ -2,12 +2,14 @@ package com.example.launder.ui.home.customer
 
 //import kotlinx.android.synthetic.main.activity_main.*
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -123,6 +125,28 @@ class EditOrderFragment : Fragment(R.layout.fragment_orderedit) {
 
         }
 
+        }
+        binding.ll.setOnClickListener {
+            // Latitude and Longitude for Point A
+            val latA = -1.3874  // Ongata Rongai latitude
+            val lonA = 36.9673  // Ongata Rongai longitude
+
+            // Latitude and Longitude for Point B
+            val latB = -1.2921
+            val lonB = 36.8219
+
+            // Create a URI for Google Maps with polyline information
+            val gmmIntentUri = Uri.parse("http://maps.google.com/maps?saddr=$latA,$lonA&daddr=$latB,$lonB&dirflg=d")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+
+            // Verify that the intent will resolve to an activity
+            if (mapIntent.resolveActivity(requireActivity().packageManager) != null) {
+                startActivity(mapIntent)
+            } else {
+                // If Google Maps app is not installed, handle the situation as needed
+                Toast.makeText(requireContext(), "Google Maps app is not installed", Toast.LENGTH_SHORT).show()
+            }
         }
         binding.dele.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())

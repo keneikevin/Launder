@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
    >
     <item
-        android:id="@+id/serviceFragment"
-        android:title="Services"
+        android:id="@+id/usersFragment"
+        android:title="Agents"
         android:icon="@drawable/service"
         />
     <item

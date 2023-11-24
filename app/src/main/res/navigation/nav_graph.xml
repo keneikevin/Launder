@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graqph"
-    app:startDestination="@id/serviceFragment">
+    app:startDestination="@id/usersFragment">
     <action
         android:id="@+id/actiontoShoppingFragment"
         app:destination="@id/shoppingFragment" />
@@ -80,5 +80,13 @@
     <argument
         android:name="currentOrder"
         app:argType="com.example.launder.data.Order" />
+    </fragment>
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.example.launder.ui.home.customer.UsersFragment"
+        android:label="UsersFragment" >
+        <action
+            android:id="@+id/action_usersFragment_to_serviceFragment"
+            app:destination="@id/serviceFragment" />
     </fragment>
 </navigation>

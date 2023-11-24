@@ -1,9 +1,9 @@
 package com.example.launderagent.adapterpackage
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,9 +13,16 @@ import com.example.launder.databinding.ServiceBinding
 import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
-class ServiceAdapter @Inject constructor(
+import com.example.launder.data.User
+import com.example.launder.ui.home.customer.ServiceFragmentDirections
+import com.example.launder.ui.home.customer.UsersFragmentDirections
+
+interface UserItemClickListener {
+    fun onUserItemClicked(user: User)
+}
+class UsersAdapter @Inject constructor(
     private val glide: RequestManager
-) : RecyclerView.Adapter<ServiceAdapter.PostViewHolder>() {
+) : RecyclerView.Adapter<UsersAdapter.PostViewHolder>() {
 
     class PostViewHolder(val binding: ServiceBinding) : RecyclerView.ViewHolder(binding.root) {
         val ivPostImage: ImageView = binding.img
@@ -24,19 +31,19 @@ class ServiceAdapter @Inject constructor(
         val cad = binding.cad
     }
 
-    private val diffCallback = object : DiffUtil.ItemCallback<Service>() {
-        override fun areContentsTheSame(oldItem: Service, newItem: Service): Boolean {
+    private val diffCallback = object : DiffUtil.ItemCallback<User>() {
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
 
-        override fun areItemsTheSame(oldItem: Service, newItem: Service): Boolean {
-            return oldItem.mediaId == newItem.mediaId
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem.uid == newItem.uid
         }
     }
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    var posts: List<Service>
+    var posts: List<User>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
@@ -57,14 +64,17 @@ class ServiceAdapter @Inject constructor(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
         holder.apply {
-            glide.load(post.img).into(ivPostImage)
-            tvPostAuthor.text = post.title
-          //  tvPostText.text = post.price
+            glide.load(post.profilePictureUrl).into(ivPostImage)
+            tvPostAuthor.text = post.username
+            //tvPostText.text = post.phone
             cad.setOnClickListener {
-                Snackbar.make(this.itemView, "Swipe to delete", Snackbar.LENGTH_SHORT).show()
+                val directions= UsersFragmentDirections.actionUsersFragmentToServiceFragment(post)
+                it.findNavController().navigate(directions)
+               // Snackbar.make(this.itemView, "Swipe", Snackbar.LENGTH_SHORT).show()
             }
 
         }
+
     }
 
     private var onDeletePostClickListener: ((Service) -> Unit)? = null

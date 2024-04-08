@@ -18,6 +18,7 @@ import com.example.launderagent.data.entities.ShoppingItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
@@ -36,10 +37,9 @@ class mainRepositoryImpl @Inject constructor(
     private val cakes = firestore.collection(SERVICE_COLLECTION)
     private val orders = firestore.collection("orders")
     private val users = firestore.collection("users")
-
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
-
+    
     override suspend fun login(email: String, password: String): Resource<FirebaseUser> {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
@@ -49,26 +49,7 @@ class mainRepositoryImpl @Inject constructor(
             Resource.Error(e.localizedMessage)
         }
     }
-    override suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String,services:List<ShoppingItem>) = withContext(Dispatchers.IO) {
-        safeCall {
-            val uid = firebaseAuth.uid!!
-            val oderId = UUID.randomUUID().toString()
-//            val imageUploadResult = storage.getReference(postId).putFile(imageUri).await()
-//            val imageUrl = imageUploadResult?.metadata?.reference?.downloadUrl?.await().toString()
-            val post = Order(
-                code = code,
-                price = prise,
-                orderId = oderId,
-                bookTime = bookTime,
-                completeTime = completeTime,
-                status = status,
-                services = services,
-                oderUid = uid
-            )
-            orders.document(oderId).set(post).await()
-            Resouce.success(Any())
-        }
-    }
+
     override suspend fun updateOrder(profileUpdate: OrderUpdate) = withContext(Dispatchers.IO) {
         safeCall {
 //            val imageUrl = profileUpdate.profilePictureUri?.let { uri ->
@@ -110,13 +91,7 @@ class mainRepositoryImpl @Inject constructor(
 
         storageRef.putFile(imageUri).await().metadata?.reference?.downloadUrl?.await()
     }
-    override suspend fun deleteService(post: Service) = withContext(Dispatchers.IO) {
-        safeCall {
-            cakes.document(post.mediaId).delete().await()
-            storage.getReferenceFromUrl(post.img).delete().await()
-            Resouce.success(post)
-        }
-    }
+
 
 
     override suspend fun updateProfile(profileUpdate: ProfileUpdate) = withContext(Dispatchers.IO) {
@@ -195,12 +170,13 @@ class mainRepositoryImpl @Inject constructor(
             Resource.Error(e.localizedMessage)
         }
     }
-    override suspend fun getServices() = withContext(Dispatchers.IO) {
+    override suspend fun getServices(uid: String) = withContext(Dispatchers.IO) {
         safeCall {
-            val uid = FirebaseAuth.getInstance().currentUser?.uid
+           // val uid = FirebaseAuth.getInstance().currentUser?.uid
 
 
             val allPosts = cakes
+                .whereEqualTo("authorUid", uid)
                 //  .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .await()
@@ -218,7 +194,8 @@ class mainRepositoryImpl @Inject constructor(
 
 
             val allPosts = users
-                //  .orderBy("date", Query.Direction.DESCENDING)
+                .whereNotEqualTo("uid", uid) // Filter to exclude matching uid
+
                 .get()
                 .await()
 
@@ -227,27 +204,33 @@ class mainRepositoryImpl @Inject constructor(
             Resouce.success(allPosts)
         }
     }
-    override suspend fun getOrders()= withContext(Dispatchers.IO) {
+    override suspend fun bookServices(code: String,status:String,bookTime: String,completeTime: String, prise:String,services:List<ShoppingItem>) = withContext(Dispatchers.IO) {
         safeCall {
-            val uid = FirebaseAuth.getInstance().currentUser?.uid
-            val allPosts = orders
-                .get()
-                .await()
-                .toObjects(Order::class.java)
+            val uid = firebaseAuth.uid!!
+            val oderId = UUID.randomUUID().toString()
 
-            Resouce.success(allPosts)
+            val post = Order(
+                code = code,
+                price = prise,
+                orderId = oderId,
+                bookTime = bookTime,
+                completeTime = completeTime,
+                status = status,
+                services = services,
+                customerOrderid = uid
+            )
+            orders.document(oderId).set(post).await()
+            Resouce.success(Any())
         }
     }
-    override suspend fun getOrder() = withContext(Dispatchers.IO) {
+    override suspend fun getOrders() = withContext(Dispatchers.IO) {
         safeCall {
             val uid = FirebaseAuth.getInstance().currentUser?.uid
-
-
             val allPosts = orders
-                .whereEqualTo("oderUid", uid)
+                .whereEqualTo("customerOrderid", uid)
+               //  .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .await()
-
                 .toObjects(Order::class.java)
 
             Log.d("dadada", allPosts.toString())

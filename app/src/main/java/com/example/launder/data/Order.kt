@@ -18,7 +18,7 @@ data class Order (
     var orderId: String ="",
     var bookTime: String ="",
     var completeTime: String ="",
-    var oderUid: String ="",
+    var customerOrderid: String ="",
     var status: String ="",
     @get:Exclude
     var services:@RawValue List<ShoppingItem> = listOf()

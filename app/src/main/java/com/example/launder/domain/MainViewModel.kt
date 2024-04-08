@@ -119,7 +119,7 @@ class MainViewModel @Inject constructor(
         _orders.postValue((Resouce.loading(null)))
 
         viewModelScope.launch(dispatcher){
-            val result = repository.getOrder()
+            val result = repository.getOrders()
             Log.d("tttttuu", result.toString())
             _orders.postValue((result))
         }
@@ -156,23 +156,16 @@ class MainViewModel @Inject constructor(
             _users.postValue((result))
         }
     }
-    fun getService() {
+    fun getService(uid: String) {
         _service.postValue((Resouce.loading(null)))
 
         viewModelScope.launch(dispatcher){
-            val result = repository.getServices()
+            val result = repository.getServices(uid)
             _service.postValue((result))
             _services.postValue((result.data))
         }
     }
-    fun deleteService(post: Service) {
-        _deleteServiceStatus.postValue((Resouce.loading(null)))
 
-        viewModelScope.launch(dispatcher) {
-            val result = repository.deleteService(post)
-            _deleteServiceStatus.postValue((result))
-        }
-    }
     fun bookServices(price: String, shoppingItems: List<ShoppingItem>){
 
         viewModelScope.launch(dispatcher) {
@@ -180,8 +173,9 @@ class MainViewModel @Inject constructor(
             viewModelScope.launch(dispatcher) {
                 val repo = repository.observeAllShoppingItems()
                     val currentDate = Date()
-                    val dateFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
-                    val readableDate = dateFormat.format(currentDate)
+
+                    val dateFormat = SimpleDateFormat("d-MMM-yyyy | HH:mm", Locale.getDefault())
+                val readableDate = dateFormat.format(currentDate)
                     val random = Random().nextInt(9000) + 1000
                     val result =  repository.bookServices(
                         code = "#${random}",

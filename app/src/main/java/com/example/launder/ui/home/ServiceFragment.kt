@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.RequestManager
@@ -31,20 +32,20 @@ class ServiceFragment : Fragment(R.layout.fragment_customers_service) {
     private val viewModel: MainViewModel by viewModels()
 //    private val args:CustomersServiceFragmentArgs by navArgs()
 
-    protected open val uid:String
-        get() = FirebaseAuth.getInstance().uid!!
-    //private val args:CustomersServiceFragmentArgs by navArgs()
+//    protected open val uid:String
+//        get() = FirebaseAuth.getInstance().uid!!
+    private val args:ServiceFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCustomersServiceBinding.bind(view)
 
-            viewModel.getService()
+            viewModel.getService(args.currentUser.uid)
             subscribeToObservers()
 
         subscribeToObservers()
         setUpRecylerView()
-        viewModel.loadOrder(uid)
+        viewModel.loadOrder(args.currentUser.uid)
         setHasOptionsMenu(true)
 
 

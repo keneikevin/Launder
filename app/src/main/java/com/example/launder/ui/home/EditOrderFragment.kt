@@ -44,9 +44,9 @@ class EditOrderFragment : Fragment(R.layout.fragment_orderedit) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentOrdereditBinding.bind(view)
-        if (args.currentOrder.oderUid.isNotEmpty()){
+        if (args.currentOrder.customerOrderid.isNotEmpty()){
             //   viewModel.getOrders(args.currentOrder.orderUid)
-            viewModel.getUser(args.currentOrder.oderUid)
+            viewModel.getUser(args.currentOrder.customerOrderid)
             //   binding.loc
             subscribeToObservers()
         }

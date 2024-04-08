@@ -153,6 +153,10 @@ class mainRepositoryImpl @Inject constructor(
     override fun observeTotalPrice(): LiveData<Float> {
         return shoppingDao.observeTotalPrice()
     }
+    override fun observeCountOfShoppingItems(): LiveData<Int> {
+        return shoppingDao.observeCountOfShoppingItems()
+    }
+
 
     override suspend fun signup(name: String, email: String, password: String,phone: String): Resource<FirebaseUser> {
         return try {
@@ -213,13 +217,21 @@ class mainRepositoryImpl @Inject constructor(
                 code = code,
                 price = prise,
                 orderId = oderId,
+                cnt = services.size,
                 bookTime = bookTime,
                 completeTime = completeTime,
                 status = status,
                 services = services,
                 customerOrderid = uid
             )
+            // Save the services in a separate collection
+
             orders.document(oderId).set(post).await()
+
+            val servicesRef = orders.document(oderId).collection("service")
+            services.forEach { service ->
+                servicesRef.add(service).await()
+            }
             Resouce.success(Any())
         }
     }

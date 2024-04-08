@@ -38,4 +38,5 @@ interface mainRepository {
     fun observeAllShoppingItems(): LiveData<List<ShoppingItem>>
 
     fun observeTotalPrice(): LiveData<Float>
+    fun observeCountOfShoppingItems(): LiveData<Int>
 }

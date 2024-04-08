@@ -16,12 +16,15 @@ interface ShoppingDao {
     @Query("SELECT * FROM shopping_items")
     fun observeAllShoppingItems(): LiveData<List<ShoppingItem>>
 
+    @Query("SELECT COUNT(*) FROM shopping_items")
+    fun observeCountOfShoppingItems(): LiveData<Int>
     @Query("SELECT SUM(price)FROM shopping_items")
     fun observeTotalPrice(): LiveData<Float>
-    @Query("DELETE  FROM shopping_items")
-    suspend fun deleteAllShoppingItems()
     @Query("SELECT (price*size) FROM shopping_items")
     fun observePrice(): LiveData<Float>
+    @Query("DELETE  FROM shopping_items")
+    suspend fun deleteAllShoppingItems()
+
 
 //    @Query("SELECT * FROM cakes WHERE mediaId = :noteID")
 //        suspend fun getCakeById(noteID: String): Cake?

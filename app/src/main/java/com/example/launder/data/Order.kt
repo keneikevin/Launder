@@ -16,6 +16,7 @@ data class Order (
     var code: String ="",
     var price: String ="",
     var orderId: String ="",
+    var cnt: Int =0,
     var bookTime: String ="",
     var completeTime: String ="",
     var customerOrderid: String ="",
